@@ -1,111 +1,129 @@
-🐾 Animal Image Classification with PyTorch
-📌 Project Overview
+# Animal Image Classification with PyTorch
 
-This project implements a clean, end-to-end image classification pipeline using PyTorch, following a production-oriented structure with clear separation between training, evaluation, and inference.
+## Project Overview
 
-The workflow includes:
-EDA → Training → Evaluation → Error Analysis → Inference
+This project implements a clean, end-to-end **image classification pipeline** using **PyTorch**, designed with a **production-oriented structure**. The codebase emphasizes clear separation between **training**, **evaluation**, **error analysis**, and **inference**, following best practices commonly used in real-world machine learning projects.
 
-🗂 Project Structure
-animal-classification-pytorch/
-├── dataset/                # Train / Val / Test images
-├── inference_images/       # External images for prediction
-├── notebooks/
-│   └── main.ipynb          # Main pipeline notebook
-├── src/
-│   ├── config.py           # Hyperparameters & paths
-│   ├── train.py            # Training logic
-│   ├── evaluate.py         # Evaluation & metrics
-│   └── predict.py          # predict_image function
-├── saved_models/
-│   └── best_model.pt
-├── classes.txt
-├── requirements.txt
-└── README.md
+The overall workflow:
 
-📊 Exploratory Data Analysis (EDA)
+**EDA → Training → Evaluation → Error Analysis → Inference**
 
-EDA is performed before model training to:
+---
 
-Analyze class distribution using Pandas
+## Exploratory Data Analysis (EDA)
 
-Visualize random samples from multiple classes
+EDA is conducted **before model training** to understand the raw dataset characteristics:
 
-Detect potential data imbalance
+* Analyze class distribution using **Pandas**
+* Visualize random samples from multiple classes
+* Detect potential class imbalance
 
-EDA is conducted prior to data augmentation to reflect the real dataset characteristics.
+EDA is intentionally performed **prior to data augmentation** to reflect the true data distribution.
 
-🔧 Data Augmentation
+---
 
-Applied during training only:
+## Data Augmentation
 
-RandomHorizontalFlip (p=0.5)
+Applied **only during training** to improve generalization and reduce overfitting:
 
-RandomRotation (±15°)
+* `RandomHorizontalFlip (p=0.5)`
+* `RandomRotation (±10°)`
+* `ColorJitter (brightness, contrast, saturation)`
 
-ColorJitter (brightness, contrast, saturation)
+Validation and test sets remain unaugmented to ensure fair evaluation.
 
-These augmentations help reduce overfitting and improve model generalization.
+---
 
-🧠 Model Training
+## Model Training
 
-Architecture: ResNet18 (custom classifier head)
+* **Architecture**: ResNet18 (pretrained backbone with custom classification head)
+* **Loss Function**: CrossEntropyLoss
+* **Optimizer**: Adam
+* **Epochs**: 5
 
-Loss Function: CrossEntropyLoss
+The training pipeline is modular and configurable, enabling easy experimentation with hyperparameters.
 
-Optimizer: Adam
+---
 
-Epochs: 5
+## Training Performance
 
-📈 Training Performance
-Metric	Value
-Train Accuracy	93.88%
-Validation Accuracy	93.78%
+| Metric              | Value  |
+| ------------------- | ------ |
+| Train Accuracy      | 94.19% |
+| Validation Accuracy | 94.00% |
 
-Training and validation curves indicate stable convergence without significant overfitting.
+Training and validation curves show **stable convergence** with no significant overfitting.
 
-📉 Evaluation
+---
 
-Evaluation includes:
+## Evaluation
 
-Validation accuracy monitoring
+Model evaluation includes:
 
-Confusion Matrix
+* Validation accuracy monitoring
+* Confusion matrix visualization
+* Class-wise performance analysis
 
-Class-wise performance analysis
+The confusion matrix demonstrates strong diagonal dominance, indicating effective class separation.
 
-The confusion matrix shows strong diagonal dominance, indicating effective class separation.
+---
 
-🔍 Error Analysis
+## Error Analysis
 
 Misclassified samples from the test set are visualized to:
 
-Understand visually ambiguous cases
+* Analyze visually ambiguous cases
+* Identify class confusion patterns
+* Improve model interpretability
 
-Identify class confusion patterns
+This step highlights practical **model debugging and diagnostic skills**.
 
-Improve model interpretability
+---
 
-This step demonstrates practical model debugging skills.
+## Inference
 
-🖼 Inference
+External images placed in the `inference_images/` directory can be predicted using the `predict_image` function.
 
-External images placed in inference_images/ can be predicted using the predict_image function, returning:
+Inference output includes:
 
-Top-k predicted classes
+* Top-k predicted classes
+* Corresponding confidence scores
 
-Corresponding confidence scores
+This component simulates a real-world inference workflow.
 
-🚀 Key Highlights
+---
 
-Clean modular codebase using src/
+## Reproducibility
 
-Explicit EDA and error analysis
+* Config-driven training setup
+* Fixed random seeds
+* Deterministic evaluation pipeline
 
-Production-oriented project structure
+These practices ensure consistent and reproducible results.
 
-Reproducible training via config-driven setup
+---
 
-🛠 Tech Stack
+## Tech Stack
 
-Python · PyTorch · torchvision · Pandas · Matplotlib · Jupyter Notebook
+* Python
+* PyTorch & torchvision
+* Pandas
+* Matplotlib
+* Jupyter Notebook
+
+---
+
+## Dataset
+
+The dataset used for this project is available at:
+
+[https://drive.google.com/drive/folders/1ZA6ujY6zGNLAlPBDGd-JA6pOHSBHOk6a](https://drive.google.com/drive/folders/1ZA6ujY6zGNLAlPBDGd-JA6pOHSBHOk6a)
+
+---
+
+## Key Highlights
+
+* Clean and modular codebase following production standards
+* Explicit EDA and error analysis steps
+* Clear separation between training, evaluation, and inference
+* Suitable as a portfolio project for ML / AI Engineer roles
