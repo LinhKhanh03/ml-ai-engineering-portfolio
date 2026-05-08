@@ -1,0 +1,12 @@
+python3.9.13
+pymupdf
+python-dotenv
+langchain
+langchain-core
+langchain-text-splitters
+langchain-community
+langchain-huggingface
+sentence-transformers
+langchain-chromadb
+langchain-google-genai
+torch torchvision torchaudio --index-url
