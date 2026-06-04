@@ -1,4 +1,4 @@
-import os
+import os, torch
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
@@ -11,13 +11,14 @@ from app.config import (
     TEMPERATURE,
     MAX_OUTPUT_TOKENS)
 
-os.environ["HUGGINGFACEHUB_API_TOKEN"] = HF_TOKEN
-
 
 def get_embedding():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
     embedding = HuggingFaceEmbeddings(
         model_name=EMBEDDING_MODEL,
-        model_kwargs={"device": "cuda"}
+        model_kwargs={"token": HF_TOKEN,
+                      "device": device},
+        encode_kwargs={"normalize_embeddings": True}
     )
     return embedding
 
@@ -41,7 +42,10 @@ def load_vectorstore():
 def get_retriever():
     db = load_vectorstore()
     retriever = db.as_retriever(
-        search_kwargs={"k": TOP_K}
+        search_type="mmr",
+        search_kwargs={"k": TOP_K,
+                       "fetch_k": TOP_K * 3,
+                       "lambda_mult": 0.7}
     )
     return retriever
 

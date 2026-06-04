@@ -1,7 +1,6 @@
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
@@ -14,6 +13,7 @@ PDF_FILE = os.path.join(DATA_DIR, "Cam_nang.pdf")
 
 EMBEDDING_MODEL = "intfloat/multilingual-e5-base"
 LLM_MODEL = "gemini-2.5-flash"
+RERANK_MODEL = "BAAI/bge-reranker-v2-m3"
 
 CHUNK_SIZE = 700
 CHUNK_OVERLAP = 150
