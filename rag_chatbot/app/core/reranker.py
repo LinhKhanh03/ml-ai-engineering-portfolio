@@ -1,9 +1,8 @@
 from sentence_transformers import CrossEncoder
-from langchain.schema import Document
-from app.config import RERANK_MODEL
-import torch
+from langchain_core.documents import Document
+from app.config.config import RERANK_MODEL
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = "cpu"
 rerank_model = CrossEncoder(RERANK_MODEL, device=device)
 
 def rerank_docs(question: str, docs: list[Document], top_n: int = 3) -> list[Document]:

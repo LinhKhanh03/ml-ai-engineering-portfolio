@@ -1,7 +1,7 @@
-from app.rag_pipeline import get_retriever, get_llm
-from app.prompts import build_prompt
-from app.memory import create_memory, load_history, save_turn
-from app.reranker import rerank_docs
+from app.core.rag_pipeline import get_retriever, get_llm
+from app.core.prompts import build_prompt
+from app.core.memory import create_memory, load_history, save_turn
+from app.core.reranker import rerank_docs
 
 
 def chat():

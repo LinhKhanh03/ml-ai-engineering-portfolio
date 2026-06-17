@@ -1,4 +1,4 @@
-from langchain.memory import ConversationBufferWindowMemory
+from langchain_classic.memory import ConversationBufferWindowMemory
 
 def create_memory(k: int = 5) -> ConversationBufferWindowMemory:
     return ConversationBufferWindowMemory(

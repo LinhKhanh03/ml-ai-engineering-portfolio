@@ -1,6 +1,6 @@
 import fitz
-from langchain.schema import Document
-from app.config import PDF_FILE
+from langchain_core.documents import Document
+from app.config.config import PDF_FILE
 
 def load_pdf():
     docs = []

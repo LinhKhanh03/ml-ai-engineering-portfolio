@@ -1,5 +1,5 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from app.config import CHUNK_SIZE, CHUNK_OVERLAP, EMBEDDING_MODEL
+from app.config.config import CHUNK_SIZE, CHUNK_OVERLAP, EMBEDDING_MODEL
 
 from transformers import AutoTokenizer
 

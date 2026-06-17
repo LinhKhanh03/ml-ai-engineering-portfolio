@@ -1,8 +1,8 @@
-import os, torch
+import torch
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_google_genai import ChatGoogleGenerativeAI
-from app.config import (
+from app.config.config import (
     HF_TOKEN,
     EMBEDDING_MODEL,
     VECTOR_DB_DIR,

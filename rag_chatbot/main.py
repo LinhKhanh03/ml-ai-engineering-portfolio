@@ -1,4 +1,4 @@
-from app.ingest import ingest
+from app.ingestion.ingest import ingest
 from app.chat import chat
 import warnings
 
