@@ -6,15 +6,11 @@ This repository contains my machine learning, AI engineering, and data science p
 
 ## Projects
 
-### 1. Animal Image Classification
-Machine learning project for image classification using deep learning techniques.
-
-### 2. RAG-Based AI Chatbot
+### RAG-Based AI Chatbot
 End-to-end Retrieval-Augmented Generation (RAG) chatbot for intelligent document question answering using LangChain, ChromaDB, and Google Gemini API.
 
 ## Areas of Interest
 
-- Machine Learning
 - AI Engineering
 - Data Science
 - Large Language Models (LLMs)
@@ -25,10 +21,7 @@ End-to-end Retrieval-Augmented Generation (RAG) chatbot for intelligent document
 ## Tech Stack
 
 - Python
-- Scikit-learn
-- PyTorch
 - LangChain
 - ChromaDB
 - HuggingFace
 - SQL
-- Pandas / NumPy / Matplotlib / Seaborn
