@@ -1,22 +1,40 @@
-from app.graph import build_agent, ask_agent
-from app.core.memory import create_memory, load_history, save_turn
+from app.core.rag_pipeline import (
+    get_retriever,
+    get_llm)
+from app.core.prompts import prompt
 
 def chat():
-    print("*Multi-source RAG Agent - HUB*")
-    print("Gõ 'exit' để thoát.\n")
-
-    agent = build_agent()
-    memory = create_memory()
+    retriever = get_retriever()
+    llm = get_llm()
 
     while True:
-        question = input("CLIENT: ").strip()
+        question = input("\nAsk: ")
         if question.lower() == "exit":
             break
-        if not question:
-            continue
+   
+        docs = retriever.invoke(question)
+        context = ""
+        sources = []
 
-        history = load_history(memory)
-        answer = ask_agent(agent, question, history)
+        for i, doc in enumerate(docs):
+            content = doc.page_content
+            page = doc.metadata.get("page", "N/A")
+            context += f"\n[Document {i+1} | Page {page}]\n{content}\n"
+            sources.append(f"Document {i+1} - Page {page}")
 
-        print(f"\nBOT: {answer}\n")
-        save_turn(memory, question, answer)
+        prom = prompt(context, question)
+        response = llm.invoke(prom)
+        
+        content = response.content
+
+        if isinstance(content, list):
+            response_text = content[0].get('text', '') if isinstance(content[0], dict) else str(content[0])
+        else:
+            response_text = content
+
+        print("\nAnswer:")
+        print(response_text)
+
+        print("\nSources:")
+        for s in sources:
+            print("-", s)
