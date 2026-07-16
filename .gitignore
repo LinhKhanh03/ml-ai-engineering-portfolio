@@ -1,5 +1,4 @@
 .env
-pipeline.txt
 venv/
 vectorstore/ 
 __pycache__/
