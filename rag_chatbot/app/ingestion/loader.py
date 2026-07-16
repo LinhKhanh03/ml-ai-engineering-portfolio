@@ -1,11 +1,11 @@
 import fitz
 from langchain_core.documents import Document
-from app.config.config import PDF_FILE
+from app.config import settings
 
-def load_pdf():
+def load_pdf() -> list[Document]:
     docs = []
     
-    with fitz.open(PDF_FILE) as pdf:
+    with fitz.open(settings.PDF_FILE) as pdf:
         for i, page in enumerate(pdf):
             text = page.get_text()
             if not text.strip():

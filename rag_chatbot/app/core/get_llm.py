@@ -1,5 +1,5 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
-from app.config.config import LLM_MODEL, TEMPERATURE, MAX_OUTPUT_TOKENS
+from app.config.settings import LLM_MODEL, TEMPERATURE, MAX_OUTPUT_TOKENS
 
 def get_llm() -> ChatGoogleGenerativeAI:
     llm = ChatGoogleGenerativeAI(

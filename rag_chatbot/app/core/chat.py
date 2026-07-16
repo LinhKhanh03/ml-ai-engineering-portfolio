@@ -19,7 +19,7 @@ def chat():
         for i, doc in enumerate(docs):
             content = doc.page_content
             page = doc.metadata.get("page", "N/A")
-            context += f"\n[Document {i+1} | Page {page}]\n{content}\n"
+            context += f"{content}\n"
             sources.append(f"Document {i+1} - Page {page}")
 
         prom = prompt(context, question)
