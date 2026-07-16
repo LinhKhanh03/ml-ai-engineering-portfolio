@@ -1,6 +1,6 @@
 # RAG Chatbot — PDF Question Answering System
 
-A Retrieval-Augmented Generation (RAG) system that enables natural language Q&A over internal PDF documents using bge-m3 embeddings and Gemini 3.5 Flash LLM.
+A Retrieval-Augmented Generation (RAG) system that enables natural language Q&A over internal PDF documents using bge-m3 embeddings, bge-reranker-v2-m3 reranking and Gemini 3.5 Flash LLM.
 
 ---
 
@@ -16,6 +16,7 @@ RAG_CHATBOT/
 │   │   ├── __init__.py
 │   │   ├── chat.py             # Chat loop and response handling
 │   │   ├── get_llm.py          # Gemini LLM initialization
+│   │   ├── memory.py           # Sliding window conversation memory
 │   │   └── prompts.py          # Prompt template
 │   ├── ingestion/
 │   │   ├── __init__.py
@@ -25,6 +26,7 @@ RAG_CHATBOT/
 │   └── rag/
 │       ├── __init__.py
 │       ├── embedding.py        # HuggingFace embedding model
+│       ├── reranker.py         # Cross-Encoder reranking
 │       ├── retriever.py        # MMR-based retriever
 │       └── vectorstore.py      # ChromaDB vectorstore
 ├── data/
@@ -46,6 +48,8 @@ RAG_CHATBOT/
 - Token-aware chunking using HuggingFace tokenizer
 - Multilingual embeddings with `BAAI/bge-m3`
 - MMR-based retrieval for diverse and relevant context
+- Cross-Encoder reranking with BAAI/bge-reranker-v2-m3 for improved context precision
+- Sliding window conversation memory to maintain multi-turn context (last 5 turns)
 - Gemini 3.5 Flash for answer generation
 - Source page citation in every response
 
@@ -59,6 +63,8 @@ RAG_CHATBOT/
 | Text splitting | `langchain-text-splitters` |
 | Embedding model | `BAAI/bge-m3` |
 | Vector database | ChromaDB (`langchain-chroma`) |
+| Reranking model   | `BAAI/bge-reranker-v2-m3` (Sentence Transformers) |
+| Conversation memory | Sliding window (langchain-core messages)        |
 | LLM | Gemini 3.5 Flash (`langchain-google-genai`) |
 | Framework | LangChain |
 | Tracing & Monitoring | LangSmith |
@@ -115,19 +121,22 @@ PDF file
    ↓ PyMuPDF
 Raw text per page
    ↓ RecursiveCharacterTextSplitter (token-aware)
-Chunks (700 tokens, 105 overlap)
+Chunks (700 tokens, 150 overlap)
    ↓ BAAI/bge-m3
 Vector embeddings (1024 dimensions)
    ↓ ChromaDB
 Persistent vectorstore
 
 User question
+   ↓ load conversation history (last 5 turns)
    ↓ embed question
    ↓ MMR retrieval (fetch 15, return 5)
+   ↓ Cross-Encoder reranking (return top 3)
 Relevant chunks
-   ↓ build prompt
+   ↓ build prompt (history + context + question)
    ↓ Gemini 3.5 Flash
 Answer + Source pages
+   ↓ save turn to memory
 ```
 
 ---
@@ -136,15 +145,20 @@ Answer + Source pages
 
 All parameters are defined in `app/config/settings.py`:
 
-| Parameter | Default | Description |
-|---|---|---|
-| `EMBEDDING_MODEL` | `BAAI/bge-m3` | HuggingFace embedding model |
-| `LLM_MODEL` | `gemini-3.5-flash` | Gemini model name |
-| `CHUNK_SIZE` | `700` | Max tokens per chunk |
-| `CHUNK_OVERLAP` | `150` | Overlapping tokens between chunks |
-| `TOP_K` | `5` | Number of chunks to retrieve |
-| `TEMPERATURE` | `0.1` | LLM temperature |
-| `MAX_OUTPUT_TOKENS` | `4096` | Max tokens in LLM response |
+--------------------------------------------------------------------------------------------
+| Parameter           | Default                   | Description                            |
+|---------------------|---------------------------|----------------------------------------|
+| `EMBEDDING_MODEL`   | `BAAI/bge-m3`             | HuggingFace embedding model            |
+| `RERANK_MODEL`      | `BAAI/bge-reranker-v2-m3` | Cross-Encoder reranking model          |
+| `LLM_MODEL`         | `gemini-3.5-flash`        | Gemini model name                      |
+| `CHUNK_SIZE`        | `700`                     | Max tokens per chunk                   |
+| `CHUNK_OVERLAP`     | `150`                     | Overlapping tokens between chunks      |
+| `TOP_K`             | `5`                       | Number of chunks to retrieve           |
+| `TOP_N`             | `3`                       | Number of chunks after reranking       |
+| `MEMORY_K`          | `5`                       | Number of conversation turns to retain |
+| `TEMPERATURE`       | `0.1`                     | LLM temperature                        |
+| `MAX_OUTPUT_TOKENS` | `4096`                    | Max tokens in LLM response             |
+--------------------------------------------------------------------------------------------
 
 ## Tracing with LangSmith
 

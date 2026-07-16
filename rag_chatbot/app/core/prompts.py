@@ -17,6 +17,12 @@ Nhiệm vụ của bạn là đọc CONTEXT và trả lời chính xác câu h�
 7. Trình bày rõ ràng bằng các gạch đầu dòng hoặc từng mục nếu phù hợp.
 
 ========================
+HISTORY
+========================
+
+{history}
+
+========================
 CONTEXT
 ========================
 
@@ -33,8 +39,9 @@ TRẢ LỜI
 ========================
 """
 
-def prompt(context: str, question: str) -> str:
+def prompt(context: str, question: str, history: str = "") -> str:
     return RAG_PROMPT_TEMPLATE.format(
+        history=history if history else "Chưa có lịch sử hội thoại.",
         context=context,
         question=question
     )
