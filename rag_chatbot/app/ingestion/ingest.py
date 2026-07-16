@@ -1,6 +1,6 @@
 from app.ingestion.loader import load_pdf
 from app.ingestion.chunker import split_text
-from app.core.rag_pipeline import create_vectorstore
+from app.rag.vectorstore import create_vectorstore
 
 def ingest():
     documents = load_pdf()

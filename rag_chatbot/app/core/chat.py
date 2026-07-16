@@ -1,7 +1,7 @@
-from app.core.rag_pipeline import (
-    get_retriever,
-    get_llm)
 from app.core.prompts import prompt
+from app.rag.retriever import get_retriever
+from app.core.get_llm import get_llm
+
 
 def chat():
     retriever = get_retriever()
@@ -34,7 +34,9 @@ def chat():
 
         print("\nAnswer:")
         print(response_text)
-
-        print("\nSources:")
-        for s in sources:
-            print("-", s)
+        if response_text == "Tôi không tìm thấy thông tin này trong tài liệu được cung cấp.":
+            continue
+        else:
+            print("\nSources:")
+            for s in sources:
+                print("-", s)
