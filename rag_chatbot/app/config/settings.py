@@ -6,6 +6,9 @@ load_dotenv()
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 HF_TOKEN = os.getenv("HF_TOKEN")
 
+DATABASE_URL = os.getenv("DATABASE_URL")
+TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 VECTOR_DB_DIR = os.path.join(BASE_DIR, "vectorstore")

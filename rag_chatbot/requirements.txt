@@ -5,6 +5,9 @@ langchain-text-splitters
 langchain-huggingface
 langchain-chroma
 langchain-google-genai
+langchain-community
 sentence-transformers
+psycopg2-binary
+langchain-tavily
 
 # Tai rieng: pip install torch==2.7.1+cu118 --extra-index-url https://download.pytorch.org/whl/cu118

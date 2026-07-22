@@ -8,6 +8,19 @@ A Retrieval-Augmented Generation (RAG) system that enables natural language Q&A 
 
 ```
 RAG_CHATBOT/
+├── agent/
+│   ├── core/
+│   │   ├── __init__.py
+│   │   └── chat.py             # Agent chat entry point
+│   ├── graph/
+│   │   ├── __init__.py
+│   │   ├── state.py            # LangGraph AgentState TypedDict
+│   │   └── graph.py            # Router node + Synthesizer node
+│   └── tools/
+│       ├── __init__.py
+│       ├── pdf_tool.py         # PDF retrieval tool
+│       ├── sql_tool.py         # PostgreSQL Olist dataset tool
+│       └── web_tool.py         # Tavily web search tool
 ├── app/
 │   ├── config/
 │   │   ├── __init__.py
@@ -52,6 +65,11 @@ RAG_CHATBOT/
 - Sliding window conversation memory to maintain multi-turn context (last 5 turns)
 - Gemini 3.5 Flash for answer generation
 - Source page citation in every response
+#Update:
+- Multi-agent orchestration with LangGraph (router + synthesizer nodes)
+- Multi-source retrieval: PDF documents, PostgreSQL database, and real-time web search
+- Automatic tool selection based on question intent and language
+- Brazilian E-Commerce (Olist) dataset integration via PostgreSQL
 
 ---
 
@@ -69,6 +87,11 @@ RAG_CHATBOT/
 | Framework | LangChain |
 | Tracing & Monitoring | LangSmith |
 | GPU support | PyTorch CUDA 11.8 |
+#Update:
+| Agent orchestration | LangGraph                          |
+| Web search          | Tavily (`langchain-tavily`)        |
+| SQL database        | PostgreSQL + SQLAlchemy            |
+| Dataset             | Brazilian E-Commerce (Olist)       |
 
 ---
 
@@ -110,7 +133,21 @@ python main.py
 # Choose option 2
 ```
 
-Type your question and receive an answer with source page references. Type `exit` to quit.
+Type your question and receive an answer with source page references. 
+
+**Step 3 — Chat with Agent (multi-source):**
+
+```bash
+python main.py
+# Choose option 3
+```
+
+The agent automatically selects the appropriate tool based on your question:
+- Questions in Vietnamese about university documents → PDF tool
+- Questions in English about e-commerce data → SQL tool  
+- Questions about current news or trends → Web search tool
+- 
+Type `exit` to quit.
 
 ---
 
@@ -136,6 +173,20 @@ Relevant chunks
    ↓ build prompt (history + context + question)
    ↓ Gemini 3.5 Flash
 Answer + Source pages
+   ↓ save turn to memory
+
+## Multi-Agent Flow
+User question
+   ↓ load conversation history
+   ↓ Router node
+   → analyze question intent and language
+   → select one or more tools (pdf / sql / web)
+   → execute selected tools in parallel
+   ↓ Synthesizer node
+   → combine tool results as context
+   → build prompt (history + context + question)
+   → Gemini 3.5 Flash
+   ↓ Answer
    ↓ save turn to memory
 ```
 
